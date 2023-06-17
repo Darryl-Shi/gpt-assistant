@@ -4,11 +4,15 @@ class GPTAssistant:
     def __init__(self, config):
         self.config = config
         openai.api_key = self.config.get_openai_api_key()
+        openai.api_base = self.config.get_openai_api_base()
 
     def generate_reply(self, prompt):
-        response = openai.Completion.create(
-            engine="text-davinci-002",
-            prompt=prompt,
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": prompt},
+            ],
             max_tokens=150,
             n=1,
             stop=None,
